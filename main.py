@@ -7,7 +7,7 @@ cursor=mycon.cursor()
 #cursor.execute("DELETE FROM menu WHERE diet='Kosher';")
 #mycon.commit()
 #cursor.execute("CREATE TABLE menu(id numeric(23) NOT NULL PRIMARY KEY, diet varchar(100) NOT NULL,allergies varchar(100) NOT NULL,health varchar(100) NOT NULL,goals varchar(100) NOT NULL,gender varchar(100) NOT NULL,location varchar(100) NOT NULL,custom varchar(100) NOT NULL,weight varchar(100) NOT NULL,height varchar(100) NOT NULL,age varchar(100) NOT NULL);")
-
+import openai
 from typing import Any, final
 import os
 import discord
@@ -19,6 +19,8 @@ import datetime
 from discord.ext import tasks
 import pytz
 from datetime import datetime as dhawal
+
+openai.api_key = "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"
 
 client = commands.Bot(command_prefix=['d.'], intents=discord.Intents.all())
 client.remove_command("help")
@@ -131,6 +133,22 @@ discordtoken = ""
                                discord.app_commands.Choice(name=24, value=24),
                                discord.app_commands.Choice(name=25, value=25),
                                ])
+
+def DietPlanner(id, dietaryRestriction, healthCondition, goals, gender, weight, height, age, diningHallData):
+    diseasesDict = {"Hypertension":"requirements per day for hypertension - potassium:3400mg men, 2600mg women; sodium(max amount): 1500mg men, 1560mg women; calcium:1250mg; protein:102g; magnesium: 500mg; fiber:30g; saturatedFat(max):14g",
+                 "diabetes" : "requirements per day for diabetes - calories:2500 men,2000 women; carbs:343.75g men,275g women;fat(max):83.33g men, 66.67g women;protein:62.5g men,50g women;sugar(max):31.25g men,25g women", 
+                 "menstrualCycle" : "requirements per day for menstrualCycle - carbs:225g, fat:56g, protein:150g, iron:18mg"}
+    
+    conversation = [{"role":"system", "content":"You are an assistant that gives nutritional advice to students based on input menus from campus dining halls"}]
+
+    discordInput = "dietary restriction:{}, health condition:{}, goals:{}, gender:{}, weight:{}, height:{}, age:{}".format(dietaryRestriction,healthCondition,goals,gender,weight,height,age)
+    conversation.append({"role":"user","content":str(diningHallData)+ ' This is todays breakfast menu for dining hall. Give me a diet plan along with the number of servings for todays breakfast based on the following user preferences, user data and disease data: '+ discordInput + " " + diseasesDict[healthCondition]})
+    GPTresponse = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=conversation
+    )
+    return GPTresponse['choices'][0]['message']['content'].strip("\n").strip()
+
 async def info(content: discord.Interaction, diet:discord.app_commands.Choice[str], allergies:discord.app_commands.Choice[str] ,health:discord.app_commands.Choice[str],goals:discord.app_commands.Choice[str],gender:discord.app_commands.Choice[str],location:discord.app_commands.Choice[str],custom:discord.app_commands.Choice[str],weight:discord.app_commands.Choice[str],height:discord.app_commands.Choice[str],age:discord.app_commands.Choice[int]):
     cursor.execute(f"SELECT * FROM menu WHERE id={content.user.id}")
     data=cursor.fetchone()
