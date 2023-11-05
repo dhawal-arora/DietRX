@@ -9,8 +9,8 @@ cursor=mycon.cursor()
 #cursor.execute("CREATE TABLE menu(id numeric(23) NOT NULL PRIMARY KEY, diet varchar(100) NOT NULL,allergies varchar(100) NOT NULL,health varchar(100) NOT NULL,goals varchar(100) NOT NULL,gender varchar(100) NOT NULL,location varchar(100) NOT NULL,custom varchar(100) NOT NULL,weight varchar(100) NOT NULL,height varchar(100) NOT NULL,age varchar(100) NOT NULL);")
 import openai
 import json
-with open("breakfast.json", "w") as breakfast:
-    data = json.load(breakfast)
+# with open("breakfast.json", "w") as breakfast:
+#     data = json.load(breakfast)
 from typing import Any, final
 import os
 import discord
