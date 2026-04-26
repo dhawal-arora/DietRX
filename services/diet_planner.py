@@ -1,9 +1,12 @@
 import json
+import os
 import openai
 from config import OPENAI_API_KEY
 from database import cursor
 
-openai.api_key = OPENAI_API_KEY
+_DATA_DIR = os.path.join(os.path.dirname(__file__), "..")
+
+_openai_client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
 LOCATION_FILES = {
     "Livingston":    ("data0.json",  "data1.json",  "data2.json"),
@@ -34,17 +37,17 @@ def _get_meal_plan(meal_data, meal_name, user_input, disease_info):
             + disease_info
         ),
     })
-    response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=conversation)
-    return response['choices'][0]['message']['content'].strip("\n").strip()
+    response = _openai_client.chat.completions.create(model="gpt-3.5-turbo", messages=conversation)
+    return response.choices[0].message.content.strip("\n").strip()
 
 
 def DietPlanner(user_id, location):
     breakfast_file, lunch_file, dinner_file = LOCATION_FILES[location]
-    with open(breakfast_file) as f:
+    with open(os.path.join(_DATA_DIR, breakfast_file)) as f:
         breakfast_data = json.load(f)
-    with open(lunch_file) as f:
+    with open(os.path.join(_DATA_DIR, lunch_file)) as f:
         lunch_data = json.load(f)
-    with open(dinner_file) as f:
+    with open(os.path.join(_DATA_DIR, dinner_file)) as f:
         dinner_data = json.load(f)
 
     cursor.execute(f"SELECT diet FROM menu WHERE id={user_id};")

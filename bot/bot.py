@@ -11,7 +11,6 @@ def create_bot():
     @client.event
     async def on_ready():
         print(f"We have logged in as {client.user}")
-        await client.wait_until_ready()
         await client.change_presence(
             activity=discord.Activity(type=discord.ActivityType.listening, name="/busreport")
         )

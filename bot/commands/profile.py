@@ -6,7 +6,7 @@ _DIET_CHOICES = [
     discord.app_commands.Choice(name="Non-Vegetarian (Non-Veg)", value="2B"),
     discord.app_commands.Choice(name="Halal", value="3B"),
     discord.app_commands.Choice(name="Kosher", value="4B"),
-    discord.app_commands.Choice(name="Vegan", value="4B"),
+    discord.app_commands.Choice(name="Vegan", value="5B"),
 ]
 
 _ALLERGY_CHOICES = [
@@ -82,7 +82,7 @@ _HEIGHT_CHOICES = [
     discord.app_commands.Choice(name="6.34-6.59", value="W7"),
 ]
 
-_AGE_CHOICES = [discord.app_commands.Choice(name=age, value=age) for age in range(17, 26)]
+_AGE_CHOICES = [discord.app_commands.Choice(name=str(age), value=age) for age in range(17, 26)]
 
 
 def setup(client):
