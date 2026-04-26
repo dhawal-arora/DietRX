@@ -1,0 +1,7 @@
+discord.py
+openai
+mysql-connector-python
+requests
+beautifulsoup4
+html5lib
+python-dotenv

@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment / secrets
+.env
+
+# Generated dining-hall menu data (run scrapers/menu.py to regenerate)
+data*.json
+breakfast.json
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Build / packaging
+*.egg-info/
+dist/
+build/
